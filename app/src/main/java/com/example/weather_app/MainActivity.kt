@@ -48,9 +48,7 @@ class MainActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
-
         return super.onOptionsItemSelected(item)
-
     }
 
     inner class weatherTask(city:String) : AsyncTask<String, Void, String>() {
