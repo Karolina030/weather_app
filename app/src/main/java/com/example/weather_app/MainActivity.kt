@@ -12,7 +12,6 @@ import android.location.LocationManager
 
 import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -34,49 +33,37 @@ class MainActivity : AppCompatActivity() {
     internal lateinit var image: ImageView
 
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    val PERMISSION_ID = 1010
-    internal lateinit var button2: Button
+    private val PERMISSION_ID = 1010
+    private lateinit var locationButton: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        requestPermission()
+
        val city = intent.getStringExtra("cityName")
 
 
-        button2 = findViewById(R.id.locationButton)
+        locationButton = findViewById(R.id.locationButton)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        button2.setOnClickListener {
-            Log.d("Debug:", CheckPermission().toString())
-            Log.d("Debug:", isLocationEnabled().toString())
-            RequestPermission()
-//            city = getLastLocation()
-            getLastLocation()
-        }
-///
-//        city = getLastLocation()
 
-//        if (city == null) {
-//            weatherTask("krakow").execute()
-//
-//        }
-//        else{
-//            weatherTask(city).execute()
-//        }
+        locationButton.setOnClickListener {
+            getLocation()
+        }
+
         if (city != null) {
-            callWetTask(city)
+            callWetherTask(city)
         } else {
-            weatherTask("krakow").execute()
+            getLocation()
         }
 
 
     }
 
 
-
-
-    fun callWetTask(city: String) {
+    private fun callWetherTask(city: String) {
         weatherTask(city).execute()
     }
 
@@ -116,7 +103,7 @@ class MainActivity : AppCompatActivity() {
             return response
         }
 
-        override fun onPostExecute(response: String?) {
+        override fun onPostExecute(response: String) {
             image = findViewById(R.id.image)
 
             super.onPostExecute(response)
@@ -180,34 +167,32 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
-        private fun CheckPermission():Boolean {
-            if(
-                ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            ){
-                return true
-            }
-
-            return false
-
+    private fun checkPermission():Boolean {
+        if(
+            ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        ){
+            return true
         }
 
-        fun RequestPermission() {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION),
-                PERMISSION_ID
-            )
-        }
+        return false
+    }
 
-        @SuppressLint("ServiceCast")
-        fun isLocationEnabled():Boolean{
 
-            var locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        }
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION),
+            PERMISSION_ID
+        )
+    }
+
+    @SuppressLint("ServiceCast")
+    fun isLocationEnabled():Boolean{
+
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -215,7 +200,7 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         if(requestCode == PERMISSION_ID){
-            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
             }
         }
     }
@@ -224,17 +209,15 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun getCityName(lat: Double,long: Double):String{
-        var cityName : String = ""
         val geoCoder = Geocoder(this, Locale.getDefault())
         val Adress = geoCoder.getFromLocation(lat,long,3)
 
-        cityName = Adress[0].locality
-        return cityName
+        return Adress[0].locality
     }
 
 
-        fun getLastLocation(){
-        if(CheckPermission()){
+    private fun getLocation(){
+        if(checkPermission()){
             if(isLocationEnabled()){
                 if (ActivityCompat.checkSelfPermission(
                         this,
@@ -249,26 +232,27 @@ class MainActivity : AppCompatActivity() {
                 fusedLocationProviderClient.lastLocation.addOnCompleteListener { task->
                     val location:Location? = task.result
                     if(location == null){
-                        NewLocationData()
+                        newLocationData()
                     }
                     else {
-                        callWetTask(getCityName(location.latitude,location.longitude))
+                        callWetherTask(getCityName(location.latitude,location.longitude))
 
                     }
                 }
             }
             else {
                 Toast.makeText(this,"Please Turn on Your device Location",Toast.LENGTH_SHORT).show()
+                callWetherTask("Krakow")
             }
         }
         else {
-            RequestPermission()
+            requestPermission()
         }
     }
 
 
 
-    fun NewLocationData(){
+    private fun newLocationData(){
         val locationRequest =  LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         locationRequest.interval = 0
