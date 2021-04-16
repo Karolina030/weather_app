@@ -13,12 +13,15 @@ import com.android.volley.toolbox.Volley
 class SecondActivity : AppCompatActivity() {
     internal lateinit var recyclerView: RecyclerView
     internal lateinit var adapter: CityAdapter
-
+    internal lateinit var latitude: String
+    internal lateinit var longitude: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second)
         CitySingleton.prepereSingleton(applicationContext)
+        latitude = intent.getStringExtra("latitude").toString()
+        longitude = intent.getStringExtra("longitude").toString()
 
         recyclerView = findViewById(R.id.recyclerID)
         recyclerView.layoutManager = LinearLayoutManager(applicationContext)
@@ -31,8 +34,7 @@ class SecondActivity : AppCompatActivity() {
 
     fun makeRequest(){
         val queue = Volley.newRequestQueue(this)
-        //TODO: latitide and longitude
-        val url = "https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.037689&exclude=current&appid=c834cca8309bc772c056e3d4b6a411b0"
+        val url = "https://api.openweathermap.org/data/2.5/onecall?lat=$latitude&lon=$longitude&exclude=current&units=metric&appid=c834cca8309bc772c056e3d4b6a411b0"
 
         val stringRequest = JsonObjectRequest(
             Request.Method.GET, url, null,

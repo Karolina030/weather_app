@@ -11,11 +11,12 @@ class CityAdapter(var dataSet: Array<CityWeather>, val context: Context): Recycl
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val day:TextView
         val temp:TextView
+        val desc:TextView
 
         init {
             day = view.findViewById(R.id.day)
             temp = view.findViewById(R.id.tempText)
-
+            desc = view.findViewById(R.id.descriptionText)
         }
     }
 
@@ -37,6 +38,7 @@ class CityAdapter(var dataSet: Array<CityWeather>, val context: Context): Recycl
         val city = dataSet[position]
         viewHolder.day.text = city.day
         viewHolder.temp.text = city.temperature
+        viewHolder.desc.text = city.description
 
     }
 

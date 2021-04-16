@@ -33,24 +33,34 @@ class MainActivity : AppCompatActivity() {
     val API: String = "c834cca8309bc772c056e3d4b6a411b0"
     internal lateinit var image: ImageView
     internal lateinit var details: Button
+    internal lateinit var latitude: String
+    internal lateinit var longitude: String
 
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val PERMISSION_ID = 1010
-    private lateinit var locationButton: Button
+ //   private lateinit var locationButton: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        requestPermission()
+        // TODO: te wartości muszą się zmieniać po wyszukaniu jakiegoś miasta
+        latitude = 50.0833.toString()
+        longitude = 19.9167.toString()
 
+
+        requestPermission()
         val city = intent.getStringExtra("cityName")
         details = findViewById(R.id.details)
 
         details.setOnClickListener{
             println("details")
             val intent = Intent(this@MainActivity, SecondActivity::class.java).apply {
+                putExtra("latitude", latitude.toString())
+                putExtra("longitude", longitude.toString())
+
+
             }
             startActivity(intent)
         }
@@ -155,13 +165,19 @@ class MainActivity : AppCompatActivity() {
                     image.setImageResource(R.drawable.sunny)
                 } else if  (intId >= 200 && intId <=299){
                     image.setImageResource(R.drawable.thunder)
-                } else if  (intId >= 300 && intId <=599){
+                } else if  (intId >= 300 && intId <=499){
+                    image.setImageResource(R.drawable.drizzel)
+                } else if  (intId >= 500 && intId <=502){
                     image.setImageResource(R.drawable.rainy)
+                } else if  (intId >= 503 && intId <=599){
+                    image.setImageResource(R.drawable.rain_clouds)
                 } else if  (intId >= 600 && intId <=699){
                     image.setImageResource(R.drawable.snowy)
                 } else if  (intId >= 700 && intId <=799){
                     image.setImageResource(R.drawable.fog)
-                } else{
+                } else if  (intId == 804 ){
+                    image.setImageResource(R.drawable.full_cloud)
+                }else{
                     image.setImageResource(R.drawable.cloudy)
                 }
 
@@ -247,6 +263,8 @@ class MainActivity : AppCompatActivity() {
                     }
                     else {
                         callWetherTask(getCityName(location.latitude,location.longitude))
+                        latitude = location.latitude.toString()
+                        longitude = location.longitude.toString()
 
                     }
                 }

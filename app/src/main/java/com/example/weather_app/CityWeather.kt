@@ -1,5 +1,5 @@
 package com.example.weather_app
 
-data class CityWeather(val day: String, var temperature:String) {
+data class CityWeather(var day: String, var description: String, var temperature:String) {
 
 }
