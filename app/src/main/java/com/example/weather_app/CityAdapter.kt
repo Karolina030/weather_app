@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 
 class CityAdapter(var dataSet: Array<CityWeather>, val context: Context): RecyclerView.Adapter<CityAdapter.ViewHolder>()  {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val cityName:TextView
+        val day:TextView
         val temp:TextView
 
         init {
-            cityName = view.findViewById(R.id.cityName)
+            day = view.findViewById(R.id.day)
             temp = view.findViewById(R.id.tempText)
 
         }
@@ -35,7 +35,7 @@ class CityAdapter(var dataSet: Array<CityWeather>, val context: Context): Recycl
         // contents of the view with that element
         //viewHolder.textView.text = dataSet[position]
         val city = dataSet[position]
-        viewHolder.cityName.text = city.cityName
+        viewHolder.day.text = city.day
         viewHolder.temp.text = city.temperature
 
     }

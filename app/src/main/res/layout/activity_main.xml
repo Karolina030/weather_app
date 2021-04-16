@@ -7,6 +7,7 @@
     android:background="@drawable/background"
     tools:context=".MainActivity">
 
+
     <RelativeLayout
         android:id="@+id/locationContainer"
         android:layout_width="match_parent"
@@ -23,11 +24,11 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/locationButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/locationButton" />
+<!--            <Button-->
+<!--                android:id="@+id/locationButton"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/locationButton" />-->
 
             <TextView
                 android:id="@+id/address"
@@ -63,22 +64,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Windy"
-                android:textSize="18sp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/temperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="30sp"
                 android:text="19°C"
                 android:textSize="90sp" />
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="30dp"
-                android:background="?android:attr/listDivider" />
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -176,6 +171,7 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="30sp"
                     android:layout_weight="1">
 
                     <TextView
@@ -195,13 +191,25 @@
                         android:text="humidityText"
                         android:textAlignment="center"
                         android:textSize="18sp" />
+
                 </TableRow>
-                <View
-                    android:id="@+id/divider5"
+
+                <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="?android:attr/listDivider" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="bottom|center|center_vertical">
+
+                    <Button
+                        android:id="@+id/details"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="SHOW 5-DAYS FORECAST"
+                        android:textAlignment="center" />
+                </TableRow>
             </TableLayout>
+
+
 
         </LinearLayout>
 

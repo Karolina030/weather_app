@@ -12,6 +12,7 @@ import android.location.LocationManager
 
 import android.os.AsyncTask
 import android.os.Bundle
+import android.telecom.Call
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     val CITY:String = "krakow"
     val API: String = "c834cca8309bc772c056e3d4b6a411b0"
     internal lateinit var image: ImageView
+    internal lateinit var details: Button
 
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val PERMISSION_ID = 1010
@@ -43,15 +45,22 @@ class MainActivity : AppCompatActivity() {
 
         requestPermission()
 
-       val city = intent.getStringExtra("cityName")
+        val city = intent.getStringExtra("cityName")
+        details = findViewById(R.id.details)
 
-
-        locationButton = findViewById(R.id.locationButton)
+        details.setOnClickListener{
+            println("details")
+            val intent = Intent(this@MainActivity, SecondActivity::class.java).apply {
+            }
+            startActivity(intent)
+        }
+//        locationButton = findViewById(R.id.locationButton)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-        locationButton.setOnClickListener {
-            getLocation()
-        }
+//        locationButton.setOnClickListener {
+//            getLocation()
+//        }
+
 
         if (city != null) {
             callWetherTask(city)
@@ -78,6 +87,8 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, SearchActivity::class.java).apply {
             }
             startActivity(intent)
+        } else if(id == R.id.location){
+            getLocation()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -95,7 +106,7 @@ class MainActivity : AppCompatActivity() {
             var response:String?
             try{
                 response = URL("https://api.openweathermap.org/data/2.5/weather?q=$cityIn&units=metric&appid=$API").readText(
-                    Charsets.UTF_8
+                        Charsets.UTF_8
                 )
             }catch (e: Exception){
                 response = null
@@ -113,7 +124,7 @@ class MainActivity : AppCompatActivity() {
                 val weather = jsonObject.getJSONArray("weather").getJSONObject(0)
                 val updatedAt:Long = jsonObject.getLong("dt")
                 val updatedAtText = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.ENGLISH).format(
-                    Date(updatedAt*1000)
+                        Date(updatedAt*1000)
                 )
                 val temp = main.getString("temp").toDouble().toInt().toString()+"°C"
                 val feltTemp = main.getString("feels_like").toString()+"°C"
@@ -169,8 +180,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkPermission():Boolean {
         if(
-            ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-            ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
         ){
             return true
         }
@@ -181,9 +192,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun requestPermission() {
         ActivityCompat.requestPermissions(
-            this,
-            arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION),
-            PERMISSION_ID
+                this,
+                arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION),
+                PERMISSION_ID
         )
     }
 
@@ -195,9 +206,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         if(requestCode == PERMISSION_ID){
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
@@ -220,12 +231,12 @@ class MainActivity : AppCompatActivity() {
         if(checkPermission()){
             if(isLocationEnabled()){
                 if (ActivityCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
+                                this,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                this,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED
                 ) {
                     return
                 }
