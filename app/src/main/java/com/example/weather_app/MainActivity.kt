@@ -46,11 +46,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // TODO: te wartości muszą się zmieniać po wyszukaniu jakiegoś miasta
-        latitude = 50.0833.toString()
-        longitude = 19.9167.toString()
+//        latitude = 50.0833.toString()
+//        longitude = 19.9167.toString()
 
 
         requestPermission()
+
         val city = intent.getStringExtra("cityName")
         details = findViewById(R.id.details)
 
@@ -148,6 +149,9 @@ class MainActivity : AppCompatActivity() {
                 val address = jsonObject.getString("name")
                 val sys = jsonObject.getJSONObject("sys")
                 val wind = jsonObject.getJSONObject("wind").getString("speed")+" km/h"
+
+                longitude = jsonObject.getJSONObject("coord").getString("lon")
+                latitude = jsonObject.getJSONObject("coord").getString("lat")
 
                 findViewById<TextView>(R.id.address).text = address
                 findViewById<TextView>(R.id.data).text = updatedAtText
