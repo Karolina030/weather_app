@@ -2,4 +2,7 @@
     <string name="app_name">Weather_App</string>
 
     <string name="locationButton">Location</string>
+    <string name="search_for_a_city">Search for a city:</string>
+    <string name="searchButton">Search</string>
+    <string name="backButton">Back</string>
 </resources>

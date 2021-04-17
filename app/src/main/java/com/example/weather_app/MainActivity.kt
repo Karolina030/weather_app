@@ -9,10 +9,8 @@ import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
-
 import android.os.AsyncTask
 import android.os.Bundle
-import android.telecom.Call
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -26,7 +24,6 @@ import org.json.JSONObject
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 class MainActivity : AppCompatActivity() {
     val CITY:String = "krakow"
@@ -45,12 +42,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // TODO: te wartości muszą się zmieniać po wyszukaniu jakiegoś miasta
-//        latitude = 50.0833.toString()
-//        longitude = 19.9167.toString()
+        latitude = ""
+        longitude = ""
 
 
         requestPermission()
+
 
         val city = intent.getStringExtra("cityName")
         details = findViewById(R.id.details)
@@ -60,6 +57,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, SecondActivity::class.java).apply {
                 putExtra("latitude", latitude.toString())
                 putExtra("longitude", longitude.toString())
+                putExtra("cityName", city)
 
 
             }
@@ -74,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 
 
         if (city != null) {
-            callWetherTask(city)
+            callWeatherTask(city)
         } else {
             getLocation()
         }
@@ -83,8 +81,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun callWetherTask(city: String) {
-        weatherTask(city).execute()
+    private fun callWeatherTask(city: String) {
+        weatherTask(city).execute() //TODO: nie działa bez execute(), ale to powoduje blędy jeżeli nie mamy dostępu do internetu
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -266,16 +264,16 @@ class MainActivity : AppCompatActivity() {
                         newLocationData()
                     }
                     else {
-                        callWetherTask(getCityName(location.latitude,location.longitude))
                         latitude = location.latitude.toString()
                         longitude = location.longitude.toString()
+                        callWeatherTask(getCityName(location.latitude,location.longitude))
 
                     }
                 }
             }
             else {
                 Toast.makeText(this,"Please Turn on Your device Location",Toast.LENGTH_SHORT).show()
-                callWetherTask("Krakow")
+                callWeatherTask("Krakow")
             }
         }
         else {
