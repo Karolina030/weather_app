@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -11,11 +12,14 @@ class CityAdapter(var dataSet: Array<CityWeather>, val context: Context): Recycl
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val day:TextView
         val temp:TextView
+        val image:ImageView
+
         val desc:TextView
 
         init {
             day = view.findViewById(R.id.day)
             temp = view.findViewById(R.id.tempText)
+            image = view.findViewById(R.id.imageDay)
             desc = view.findViewById(R.id.descriptionText)
         }
     }
@@ -38,6 +42,30 @@ class CityAdapter(var dataSet: Array<CityWeather>, val context: Context): Recycl
         val city = dataSet[position]
         viewHolder.day.text = city.day
         viewHolder.temp.text = city.temperature
+
+      //  viewHolder.image.setImageResource(city.imageID)
+
+        if (city.imageID == 800){
+            viewHolder.image.setImageResource(R.drawable.sunny)
+        } else if  (city.imageID >= 200 && city.imageID <=299){
+            viewHolder.image.setImageResource(R.drawable.thunder)
+        } else if  (city.imageID >= 300 && city.imageID <=499){
+            viewHolder.image.setImageResource(R.drawable.drizzel)
+        } else if  (city.imageID >= 500 && city.imageID <=502){
+            viewHolder.image.setImageResource(R.drawable.rainy)
+        } else if  (city.imageID >= 503 && city.imageID <=599){
+            viewHolder.image.setImageResource(R.drawable.rain_clouds)
+        } else if  (city.imageID >= 600 && city.imageID <=699){
+            viewHolder.image.setImageResource(R.drawable.snowy)
+        } else if  (city.imageID >= 700 && city.imageID <=799){
+            viewHolder.image.setImageResource(R.drawable.fog)
+        } else if  (city.imageID == 804 ){
+            viewHolder.image.setImageResource(R.drawable.full_cloud)
+        }else{
+            viewHolder.image.setImageResource(R.drawable.cloudy)
+        }
+
+
         viewHolder.desc.text = city.description
 
     }

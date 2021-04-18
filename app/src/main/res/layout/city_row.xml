@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -23,12 +24,12 @@
             android:gravity="bottom|center_vertical"
             android:text="01/01/2021"
             android:textAlignment="textStart"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/descriptionText"
-            android:layout_width="wrap_content"
+            android:layout_width="152dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10sp"
             android:gravity="bottom|center_vertical"
@@ -36,6 +37,12 @@
             android:text="Windy"
             android:textAlignment="textEnd"
             android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/imageDay"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/cloudy" />
 
         <TextView
             android:id="@+id/tempText"

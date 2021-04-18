@@ -37,7 +37,9 @@ object CitySingleton {
 
                 val tempText = temp.getString("day").toDouble().toInt().toString()+"°C"
                 val desctiption = weather.getJSONArray("weather").getJSONObject(0).getString("description")
-                val dayObject = CityWeather(updatedAtText, desctiption, tempText)
+                val id = weather.getJSONArray("weather").getJSONObject(0).getInt("id")
+
+                val dayObject = CityWeather(updatedAtText, desctiption, id, tempText)
                 tmpData[i] = dayObject
             }
             var tmp = tmpData as Array<CityWeather>

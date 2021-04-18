@@ -1,6 +1,7 @@
 package com.example.weather_app
 
 import android.Manifest
+import android.accounts.NetworkErrorException
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -26,7 +27,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    val CITY:String = "krakow"
+   // val CITY:String = "krakow"
     val API: String = "c834cca8309bc772c056e3d4b6a411b0"
     internal lateinit var image: ImageView
     internal lateinit var details: Button
@@ -45,21 +46,17 @@ class MainActivity : AppCompatActivity() {
         latitude = ""
         longitude = ""
 
-
         requestPermission()
 
+        val city:String? = intent.getStringExtra("cityName")
 
-        val city = intent.getStringExtra("cityName")
         details = findViewById(R.id.details)
-
         details.setOnClickListener{
             println("details")
             val intent = Intent(this@MainActivity, SecondActivity::class.java).apply {
                 putExtra("latitude", latitude.toString())
                 putExtra("longitude", longitude.toString())
-                putExtra("cityName", city)
-
-
+                putExtra("cityName1", city)
             }
             startActivity(intent)
         }
@@ -69,6 +66,8 @@ class MainActivity : AppCompatActivity() {
 //        locationButton.setOnClickListener {
 //            getLocation()
 //        }
+
+
 
 
         if (city != null) {
@@ -82,7 +81,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun callWeatherTask(city: String) {
-        weatherTask(city).execute() //TODO: nie działa bez execute(), ale to powoduje blędy jeżeli nie mamy dostępu do internetu
+        weatherTask(city).execute()    //TODO: nie działa bez execute(), ale to powoduje blędy jeżeli nie mamy dostępu do internetu
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -103,10 +102,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     inner class weatherTask(city:String) : AsyncTask<String, Void, String>() {
-        val cityIn: String
-        init{
-            cityIn = city
-        }
+        private val cityIn: String = city
+
         override fun onPreExecute() {
             super.onPreExecute()
         }
@@ -123,7 +120,7 @@ class MainActivity : AppCompatActivity() {
             return response
         }
 
-        override fun onPostExecute(response: String) {
+        override fun onPostExecute(response: String?) {
             image = findViewById(R.id.image)
 
             super.onPostExecute(response)
@@ -145,7 +142,6 @@ class MainActivity : AppCompatActivity() {
                 val id = weather.getString("id")
 
                 val address = jsonObject.getString("name")
-                val sys = jsonObject.getJSONObject("sys")
                 val wind = jsonObject.getJSONObject("wind").getString("speed")+" km/h"
 
                 longitude = jsonObject.getJSONObject("coord").getString("lon")
@@ -183,16 +179,14 @@ class MainActivity : AppCompatActivity() {
                     image.setImageResource(R.drawable.cloudy)
                 }
 
-
-
+            } catch (e: NullPointerException) {
+                getLocation()
             } catch (e: Exception) {
                 Toast.makeText(this@MainActivity, "Sorry, something went wrong.", Toast.LENGTH_LONG).show()
                 val intent = Intent(this@MainActivity, SearchActivity::class.java).apply {
                 }
                 startActivity(intent)
-            }
-
-        }
+            }}
     }
 
 
@@ -240,7 +234,6 @@ class MainActivity : AppCompatActivity() {
     private fun getCityName(lat: Double,long: Double):String{
         val geoCoder = Geocoder(this, Locale.getDefault())
         val Adress = geoCoder.getFromLocation(lat,long,3)
-
         return Adress[0].locality
     }
 

@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
@@ -25,7 +26,7 @@ class SecondActivity : AppCompatActivity() {
         CitySingleton.prepereSingleton(applicationContext)
         latitude = intent.getStringExtra("latitude").toString()
         longitude = intent.getStringExtra("longitude").toString()
-        val city = intent.getStringExtra("cityName")
+        val city = intent.getStringExtra("cityName1")
 
         recyclerView = findViewById(R.id.recyclerID)
         recyclerView.layoutManager = LinearLayoutManager(applicationContext)
@@ -57,7 +58,10 @@ class SecondActivity : AppCompatActivity() {
                 adapter.notifyDataSetChanged()
             },
             Response.ErrorListener { error ->
-
+                Toast.makeText(this@SecondActivity, "Sorry, something went wrong.", Toast.LENGTH_LONG).show()
+                val intent = Intent(this@SecondActivity, MainActivity::class.java).apply {
+                }
+                startActivity(intent)
             })
         queue.add(stringRequest)
 
