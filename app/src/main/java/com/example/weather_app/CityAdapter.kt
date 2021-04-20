@@ -1,6 +1,5 @@
 package com.example.weather_app
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,20 +7,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class CityAdapter(var dataSet: Array<CityWeather>, val context: Context): RecyclerView.Adapter<CityAdapter.ViewHolder>()  {
+class CityAdapter(var dataSet: Array<CityWeather>): RecyclerView.Adapter<CityAdapter.ViewHolder>()  {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val day:TextView
-        val temp:TextView
-        val image:ImageView
+        val day:TextView = view.findViewById(R.id.day)
+        val temp:TextView = view.findViewById(R.id.tempText)
+        val image:ImageView = view.findViewById(R.id.imageDay)
+        val desc:TextView = view.findViewById(R.id.descriptionText)
 
-        val desc:TextView
-
-        init {
-            day = view.findViewById(R.id.day)
-            temp = view.findViewById(R.id.tempText)
-            image = view.findViewById(R.id.imageDay)
-            desc = view.findViewById(R.id.descriptionText)
-        }
     }
 
     // Create new views (invoked by the layout manager)
@@ -38,33 +30,30 @@ class CityAdapter(var dataSet: Array<CityWeather>, val context: Context): Recycl
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        //viewHolder.textView.text = dataSet[position]
         val city = dataSet[position]
         viewHolder.day.text = city.day
         viewHolder.temp.text = city.temperature
 
-      //  viewHolder.image.setImageResource(city.imageID)
 
         if (city.imageID == 800){
             viewHolder.image.setImageResource(R.drawable.sunny)
-        } else if  (city.imageID >= 200 && city.imageID <=299){
+        } else if  (city.imageID in 200..299){
             viewHolder.image.setImageResource(R.drawable.thunder)
-        } else if  (city.imageID >= 300 && city.imageID <=499){
+        } else if  (city.imageID in 300..499){
             viewHolder.image.setImageResource(R.drawable.drizzel)
-        } else if  (city.imageID >= 500 && city.imageID <=502){
+        } else if  (city.imageID in 500..502){
             viewHolder.image.setImageResource(R.drawable.rainy)
-        } else if  (city.imageID >= 503 && city.imageID <=599){
+        } else if  (city.imageID in 503..599){
             viewHolder.image.setImageResource(R.drawable.rain_clouds)
-        } else if  (city.imageID >= 600 && city.imageID <=699){
+        } else if  (city.imageID in 600..699){
             viewHolder.image.setImageResource(R.drawable.snowy)
-        } else if  (city.imageID >= 700 && city.imageID <=799){
+        } else if  (city.imageID in 700..799){
             viewHolder.image.setImageResource(R.drawable.fog)
         } else if  (city.imageID == 804 ){
             viewHolder.image.setImageResource(R.drawable.full_cloud)
         }else{
             viewHolder.image.setImageResource(R.drawable.cloudy)
         }
-
 
         viewHolder.desc.text = city.description
 

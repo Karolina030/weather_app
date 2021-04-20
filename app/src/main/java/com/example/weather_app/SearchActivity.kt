@@ -7,8 +7,8 @@ import android.widget.Button
 import android.widget.EditText
 
 class SearchActivity : AppCompatActivity() {
-    internal lateinit var button: Button
-    internal lateinit var city: EditText
+    private lateinit var button: Button
+    private lateinit var city: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +23,5 @@ class SearchActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
-
     }
-
 }

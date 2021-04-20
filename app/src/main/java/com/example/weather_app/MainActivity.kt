@@ -1,12 +1,10 @@
 package com.example.weather_app
 
 import android.Manifest
-import android.accounts.NetworkErrorException
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
@@ -27,64 +25,51 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-   // val CITY:String = "krakow"
-    val API: String = "c834cca8309bc772c056e3d4b6a411b0"
+
+    val tokenAPI: String = "c834cca8309bc772c056e3d4b6a411b0"
+
     internal lateinit var image: ImageView
-    internal lateinit var details: Button
     internal lateinit var latitude: String
     internal lateinit var longitude: String
-
-    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var details: Button
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val PERMISSION_ID = 1010
-    lateinit var city: String
- //   private lateinit var locationButton: Button
+    private lateinit var city: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        title = "Current Weather"
 
         latitude = ""
         longitude = ""
-        title = "Current Weather"
 
         requestPermission()
 
-//        val city:String? = intent.getStringExtra("cityName")
         city = intent.getStringExtra("cityName").toString()
 
         details = findViewById(R.id.details)
         details.setOnClickListener{
-            println("details")
-            val intent = Intent(this@MainActivity, SecondActivity::class.java).apply {
-                putExtra("latitude", latitude.toString())
-                putExtra("longitude", longitude.toString())
+            val intent = Intent(this@MainActivity, ForecastActivity::class.java).apply {
+                putExtra("latitude", latitude)
+                putExtra("longitude", longitude)
                 putExtra("cityName1", city)
             }
             startActivity(intent)
         }
-//        locationButton = findViewById(R.id.locationButton)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-
-//        locationButton.setOnClickListener {
-//            getLocation()
-//        }
-
-
-
 
         if (city != "null") {
             callWeatherTask(city)
         } else {
             getLocation()
         }
-
-
     }
 
 
     private fun callWeatherTask(city: String) {
-        weatherTask(city).execute()
+        WeatherTask(city).execute()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -104,23 +89,18 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    inner class weatherTask(city:String) : AsyncTask<String, Void, String>() {
+    @SuppressLint("StaticFieldLeak")
+    inner class WeatherTask(city:String) : AsyncTask<String, Void, String>() {
         private val cityIn: String = city
 
-        override fun onPreExecute() {
-            super.onPreExecute()
-        }
-
         override fun doInBackground(vararg params: String?): String? {
-            var response:String?
-            try{
-                response = URL("https://api.openweathermap.org/data/2.5/weather?q=$cityIn&units=metric&appid=$API").readText(
+            return try{
+                URL("https://api.openweathermap.org/data/2.5/weather?q=$cityIn&units=metric&appid=$tokenAPI").readText(
                         Charsets.UTF_8
                 )
             }catch (e: Exception){
-                response = null
+                null
             }
-            return response
         }
 
         override fun onPostExecute(response: String?) {
@@ -164,17 +144,17 @@ class MainActivity : AppCompatActivity() {
 
                 if (intId == 800){
                     image.setImageResource(R.drawable.sunny)
-                } else if  (intId >= 200 && intId <=299){
+                } else if  (intId in 200..299){
                     image.setImageResource(R.drawable.thunder)
-                } else if  (intId >= 300 && intId <=499){
+                } else if  (intId in 300..499){
                     image.setImageResource(R.drawable.drizzel)
-                } else if  (intId >= 500 && intId <=502){
+                } else if  (intId in 500..502){
                     image.setImageResource(R.drawable.rainy)
-                } else if  (intId >= 503 && intId <=599){
+                } else if  (intId in 503..599){
                     image.setImageResource(R.drawable.rain_clouds)
-                } else if  (intId >= 600 && intId <=699){
+                } else if  (intId in 600..699){
                     image.setImageResource(R.drawable.snowy)
-                } else if  (intId >= 700 && intId <=799){
+                } else if  (intId in 700..799){
                     image.setImageResource(R.drawable.fog)
                 } else if  (intId == 804 ){
                     image.setImageResource(R.drawable.full_cloud)
@@ -194,9 +174,8 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun checkPermission():Boolean {
-        if(
-                ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        if(     ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
         ){
             return true
         }
@@ -208,7 +187,7 @@ class MainActivity : AppCompatActivity() {
     private fun requestPermission() {
         ActivityCompat.requestPermissions(
                 this,
-                arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION),
+                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
                 PERMISSION_ID
         )
     }
@@ -236,8 +215,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun getCityName(lat: Double,long: Double):String{
         val geoCoder = Geocoder(this, Locale.getDefault())
-        val Adress = geoCoder.getFromLocation(lat,long,3)
-        return Adress[0].locality
+        val adress = geoCoder.getFromLocation(lat,long,3)
+        return adress[0].locality
     }
 
 
@@ -278,8 +257,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun newLocationData(){
         val locationRequest =  LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -288,7 +265,4 @@ class MainActivity : AppCompatActivity() {
         locationRequest.numUpdates = 1
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
     }
-
-
-
 }

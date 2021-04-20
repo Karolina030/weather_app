@@ -5,4 +5,15 @@
     <string name="search_for_a_city">Search for a city:</string>
     <string name="searchButton">Search</string>
     <string name="backButton">Back</string>
+    <string name="dateCR">01/01/2021</string>
+    <string name="windy">Windy</string>
+    <string name="temperature">20°C</string>
+    <string name="location">Location</string>
+    <string name="updAt">Updated at</string>
+    <string name="felt_air_temperature">Felt air temperature</string>
+    <string name="wind_speed">Wind speed</string>
+    <string name="pressure">Pressure</string>
+    <string name="humidity">Humidity</string>
+    <string name="forecastActivityButton">SHOW 5-DAYS FORECAST</string>
+    <string name="unknownStatus">-</string>
 </resources>
