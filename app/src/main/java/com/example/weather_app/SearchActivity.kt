@@ -13,6 +13,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+        title = "Search"
         button = findViewById(R.id.button)
         city = findViewById(R.id.editText)
 

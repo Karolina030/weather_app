@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val PERMISSION_ID = 1010
+    lateinit var city: String
  //   private lateinit var locationButton: Button
 
 
@@ -45,10 +46,12 @@ class MainActivity : AppCompatActivity() {
 
         latitude = ""
         longitude = ""
+        title = "Current Weather"
 
         requestPermission()
 
-        val city:String? = intent.getStringExtra("cityName")
+//        val city:String? = intent.getStringExtra("cityName")
+        city = intent.getStringExtra("cityName").toString()
 
         details = findViewById(R.id.details)
         details.setOnClickListener{
@@ -70,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        if (city != null) {
+        if (city != "null") {
             callWeatherTask(city)
         } else {
             getLocation()
@@ -81,7 +84,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun callWeatherTask(city: String) {
-        weatherTask(city).execute()    //TODO: nie działa bez execute(), ale to powoduje blędy jeżeli nie mamy dostępu do internetu
+        weatherTask(city).execute()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -259,7 +262,8 @@ class MainActivity : AppCompatActivity() {
                     else {
                         latitude = location.latitude.toString()
                         longitude = location.longitude.toString()
-                        callWeatherTask(getCityName(location.latitude,location.longitude))
+                        city = getCityName(location.latitude,location.longitude)
+                        callWeatherTask(city)
 
                     }
                 }
