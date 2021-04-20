@@ -16,8 +16,8 @@ object CitySingleton {
         response.let {
             val daily = response.getJSONArray("daily")
 
-            val tmpData = arrayOfNulls<CityWeather>(5)
-            for(i in 0 until 5){
+            val tmpData = arrayOfNulls<CityWeather>(8)
+            for(i in 0 until 8){
 
                 val weather = daily.getJSONObject(i)
                 val updatedAt:Long = weather.getLong("dt")

@@ -22,7 +22,7 @@ class ForecastActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forecast)
-        title = "5-days forecast"
+        title = "7-days forecast"
         CitySingleton.prepareSingleton()
         latitude = intent.getStringExtra("latitude").toString()
         longitude = intent.getStringExtra("longitude").toString()

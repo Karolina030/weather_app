@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity() {
                 } else if  (intId in 503..599){
                     image.setImageResource(R.drawable.rain_clouds)
                 } else if  (intId in 600..699){
-                    image.setImageResource(R.drawable.snowy)
+                    image.setImageResource(R.drawable.snow)
                 } else if  (intId in 700..799){
                     image.setImageResource(R.drawable.fog)
                 } else if  (intId == 804 ){
